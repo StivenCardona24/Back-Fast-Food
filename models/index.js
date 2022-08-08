@@ -1,12 +1,18 @@
 
-const Cart = require('./order');
+const Order = require('./order');
 const Product = require('./product');
 const Server = require('./server');
+const TypeFood = require('./type');
 
-//FK relaciones de tablas
+//FK tables relationships
+
+//FK product-type
+Product.belongsTo(TypeFood, {foreignKey: 'type_id'});
+TypeFood.hasMany(Product, {foreignKey: 'type_id'});
 
 module.exports = {//es adecuado que este en orden alfabetico
-    Cart,
+    Order,
     Product,
     Server,
+    TypeFood
 }
