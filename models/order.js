@@ -3,10 +3,10 @@ const { Sequelize, DataTypes } = require('sequelize');
 //Importación de parámetros de conexión MySQL con sequelize
 const { sequelize } = require('../database/config');
 
-const Order = sequelize.define('order', {
+const Order = sequelize.define('orders', {
     // Model attributes are defined here
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    qty: {
+    quantity: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
@@ -15,6 +15,10 @@ const Order = sequelize.define('order', {
     },
     state_id: {
         type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    date: {
+        type: DataTypes.date,
         allowNull: false
     }
 }, {
