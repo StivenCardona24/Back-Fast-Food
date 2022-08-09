@@ -84,7 +84,7 @@ const updateOneProduct = async(req = request, res = response) => {
         }
     })
         .then(product => {
-            if (product != 0) {
+            if (product != 0 || req.files) {
                 res.status(200).send(`Product with id: ${req.params.id} was updated`);
             }else{
                 res.status(404).send(`Product with id: ${req.params.id} not found`);
