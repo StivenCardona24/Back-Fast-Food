@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const {
     valFields, 
 } = require('../middlewares');
-const { orderExistingId, stateExistingId} = require('../helpers/db-validator');
+const { orderExistingId, stateExistingId, getProductsExisting} = require('../helpers/db-validator');
 
 
 
@@ -50,6 +50,7 @@ router.post('/', [
     check('state_id', 'No es un valor valido').isNumeric(),
     check('state_id').custom( stateExistingId ),
     check('date', 'No es una fecha valida').isDate(),
+    check('products').custom(getProductsExisting),
     // check('id_matr', 'id_curso').custom(courseValidator),
     valFields
 ], createNewOrder);

@@ -1,20 +1,18 @@
 const { response, request } = require('express');
-const { Order, State } = require('../models');
-
-const { getAllOrderedProduct,
-    getOneOrderedProduct,
-    createNewOrderedProduct,
-    updateOneOrderedProduct,
-    deleteOneOrderedProduct } = require('../controllers/orderedProductController');
+const { Order, State, OrderedProduct, Product } = require('../models');
 
 
 
 
-const getAllOrders= async(req = request, res = response) => {//obtener todos los cursos
-    await Order.findAll({attributes:[
-        'id', 'quantity', 'price', 'state_id', 'date'
-    ], include: [{model: State, 
-        attributes: ['id', 'name']}]})
+
+const getAllOrderedProduct= async(req = request, res = response) => {//obtener todos los cursos
+    await OrderedProduct.findAll({attributes:[
+        'id', 'quantity', 'price'
+    ], include: [{model: Order, 
+        attributes: ['id', 'quantity', 'price']},
+        {model: Product, 
+        attributes: ['id', 'name']},
+    ]})
         .then(order => {
             const data = JSON.stringify(order);
             const results = JSON.parse(data);
@@ -31,10 +29,16 @@ const getAllOrders= async(req = request, res = response) => {//obtener todos los
         });
 };
 
-const getOneOrder = async(req = request, res = response) => {
-    await Order.findOne({attributes:[
-        'id', 'quantity', 'price', 'date', 'state_id'
-    ], where: { id: req.params.id } })
+const getOneOrderedProduct = async(req = request, res = response) => {
+    await OrderedProduct.findOne({attributes:[
+        'id', 'quantity', 'price'
+    ],
+    include: [{model: Order, 
+        attributes: ['id', 'quantity', 'price']},
+        {model: Product, 
+        attributes: ['id', 'name']},
+    ],
+     where: { id: req.params.id } })
         .then(order => {
             const data = JSON.stringify(order);
             const results = JSON.parse(data);
@@ -52,7 +56,7 @@ const getOneOrder = async(req = request, res = response) => {
     
 };
 
-const createNewOrder = async(req = request, res = response) => {
+const createNewOrderedProduct = async(id_product = '', id_order = '', quantity = '', price= ''  ) => {
     //res.send(`Create course ${req.params.id}`);
 
 
@@ -68,37 +72,23 @@ const createNewOrder = async(req = request, res = response) => {
     // console.log(`There are ${amount} projects with an id greater than 25`);
    
    
-        let prods = req.body.products;
-        console.log(prods);
-
-        
-
-        await Order.create(
+        await OrderedProduct.create(
             {
-                
-            quantity: req.body.quantity,
-            price: req.body.price,
-            state_id:  req.body.state_id,
-            date: req.body.date,
+            id_product: id_product,
+            id_order: id_order,
+            quantity: quantity,
+            price: price,
+          
 
-        }, { fields: ['quantity', 'price', 'state_id', 'date'] })
+        }, { fields: ['id_product', 'id_order', 'quantity', 'price',] })
             .then(order => {
-
-               
                
                 if (order) {
-                    prods.forEach(prod => {
-
-                        createNewOrderedProduct(prod.id_product, order.id, prod.quantity, prod.price );
-                    });
                     
-                    res.send({
-                        order,
-                        msg: 'Pedido creado correctamente'
-                    });
+                        console.log( 'producto agregado al pedido correctamente')      
                     
                 } else {
-                    res.status(400).send('Error in insert new record');
+                   console.log('Error in insert new record');
                 }
                 
             }).catch(error => {
@@ -123,14 +113,14 @@ const createNewOrder = async(req = request, res = response) => {
 
 // }
 
-const updateOneOrder = async(req = request, res = response) => {
+const updateOneOrderedProduct = async(id_product = '', id_order = '', quantity = '', price= '' ) => {
 
 
-        await Order.update({ 
-            quantity: req.body.quantity,
-            price: req.body.price,
-            state_id:  req.body.state_id,
-            date: req.body.date,
+        await OrderedProduct.update({ 
+            id_product: id_product,
+            id_order: id_order,
+            quantity: quantity,
+            price: price,
         }, {
             where: {
                 id: req.params.id
@@ -138,9 +128,9 @@ const updateOneOrder = async(req = request, res = response) => {
         })
             .then(order => {
                 if (order != 0) {
-                    res.status(200).send(`Pedido con id: ${req.params.id} fue actualizado correctamente`);
+                   console.log(`Producto con id: ${req.params.id} fue actualizado correctamente`);
                 }else{
-                    res.status(404).send(`Pedido con id: ${req.params.id} no encontrado`);
+                    console.log(`Producto con id: ${req.params.id} no encontrado`);
                 }
                 
             }).catch(error => {
@@ -151,18 +141,18 @@ const updateOneOrder = async(req = request, res = response) => {
     
 
 
-const deleteOneOrder = async(req = request, res = response) => {
+const deleteOneOrderedProduct = async(req = request, res = response) => {
 
-        await Order.destroy({
+        await OrderedProduct.destroy({
             where: {
                 id: req.params.id
             }
         })
             .then(order => {
                 if (order != 0) {
-                    res.status(200).send(`Pedido con id: ${req.params.id} fue borrado correctamente`);
+                    console.log(`Producto con id: ${req.params.id} fue borrado correctamente`);
                 }else{
-                    res.status(404).send(`Pedido con id: ${req.params.id} no encontrado`);
+                  console.log(`Producto con id: ${req.params.id} no encontrado`);
                 }
                 
             }).catch(error => {
@@ -174,10 +164,10 @@ const deleteOneOrder = async(req = request, res = response) => {
 
 
 module.exports = {
-    getAllOrders,
-    getOneOrder,
-    createNewOrder,
-    updateOneOrder,
-    deleteOneOrder,
+    getAllOrderedProduct,
+    getOneOrderedProduct,
+    createNewOrderedProduct,
+    updateOneOrderedProduct,
+    deleteOneOrderedProduct,
     
 };

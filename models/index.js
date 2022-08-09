@@ -4,7 +4,8 @@ const Order = require('./order');
 const Product = require('./product');
 const Server = require('./server');
 const TypeFood = require('./type');
-const State = require('./state.js')
+const State = require('./state.js');
+const OrderedProduct = require('./orderedProduct');
 
 //FK tables relationships
 
@@ -22,5 +23,6 @@ module.exports = {//es adecuado que este en orden alfabetico
     Product,
     Server,
     TypeFood,
-    State
+    State,
+    OrderedProduct
 }
