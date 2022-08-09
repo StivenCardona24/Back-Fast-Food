@@ -50,8 +50,8 @@ class Server {
             res.send('<h1>Hola desde land page!</h1>');
         });
         
-        this.app.use( this.paths.products, require('../routes/products') );
-        this.app.use( this.paths.order, require('../routes/order') );
+        this.app.use( this.paths.products, require('../routes/product') );
+        //this.app.use( this.paths.order, require('../routes/order') );
 
         this.app.get('*', (req, res) => {
             res.status(404).send(`<h1>404 | Endpoint: " ${req.url} " not found</h1>`);

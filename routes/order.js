@@ -5,11 +5,8 @@ const { check } = require('express-validator');
 
 const {
     valFields, 
-    valJWT, 
-    adminRole, 
-    hasRole
 } = require('../middlewares');
-const { orderExistingId} = require('../helpers/db-validator');
+const { orderExistingId, stateExistingId} = require('../helpers/db-validator');
 
 
 

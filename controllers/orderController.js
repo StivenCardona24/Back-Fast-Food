@@ -1,13 +1,11 @@
 const { response, request } = require('express');
-const { Orders } = require('../models');
-const Order = require('../models/order');
+const { Order } = require('../models');
 
-let info = '';
-let cursos = '';
+
 
 
 const getAllOrders= async(req = request, res = response) => {//obtener todos los cursos
-    await Orders.findAll({attributes:[
+    await Order.findAll({attributes:[
         'id'
     ], include: [{ model: Order, attributes: ['id', 'quantity', 'price', 'date'],
         include: [{model: States, 
@@ -30,7 +28,7 @@ const getAllOrders= async(req = request, res = response) => {//obtener todos los
 };
 
 const getOneOrder = async(req = request, res = response) => {
-    await Orders.findOne({attributes:[
+    await Order.findOne({attributes:[
         'id', 'quantity', 'price', 'date', 'state_id'
     ], where: { id: req.params.id } })
         .then(order => {
@@ -66,7 +64,7 @@ const createNewOrder = async(req = request, res = response) => {
     // console.log(`There are ${amount} projects with an id greater than 25`);
    
    
-        await Orders.create(
+        await Order.create(
             {
                 
             quantity: req.body.quantity,
@@ -112,7 +110,7 @@ const createNewOrder = async(req = request, res = response) => {
 const updateOneOrder = async(req = request, res = response) => {
 
 
-        await Orders.update({ 
+        await Order.update({ 
             quantity: req.body.quantity,
             price: req.body.price,
             state_id:  req.body.state_id,
@@ -139,7 +137,7 @@ const updateOneOrder = async(req = request, res = response) => {
 
 const deleteOneOrder = async(req = request, res = response) => {
 
-        await Orders.destroy({
+        await Order.destroy({
             where: {
                 id: req.params.id
             }
