@@ -3,7 +3,8 @@ const { check } = require('express-validator');
 
 const {
     valFields,
-} = require('../middlewares/val-fields');
+    validateFileUpload
+} = require('../middlewares');
 
 const { productExistingId, typeExistingId, productValidator } = require('../helpers/db-validator');
 
@@ -50,6 +51,7 @@ router.post('/', [
     check('price', 'The price is required').not().isEmpty(),
     check('price', 'The price must be a number').isNumeric(),
     check('description', 'The description is required').not().isEmpty(),
+    validateFileUpload,
     valFields
 ], createNewProduct);
 
