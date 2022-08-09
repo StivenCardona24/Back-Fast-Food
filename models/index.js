@@ -1,7 +1,6 @@
 
 
 const Order = require('./order');
-
 const Product = require('./product');
 const Server = require('./server');
 const TypeFood = require('./type');
@@ -13,10 +12,13 @@ const State = require('./state.js')
 Product.belongsTo(TypeFood, {foreignKey: 'type_id'});
 TypeFood.hasMany(Product, {foreignKey: 'type_id'});
 
+//FK order-state
+Order.belongsTo(State, {foreignKey: 'state_id'});
+State.hasMany(Order, {foreignKey: 'state_id'});
+
 module.exports = {//es adecuado que este en orden alfabetico
 
     Order,
-    main,
     Product,
     Server,
     TypeFood,

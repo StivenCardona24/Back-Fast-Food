@@ -1,5 +1,5 @@
 const { response, request } = require('express');
-const { Order } = require('../models');
+const { Order, State } = require('../models');
 
 
 
@@ -7,10 +7,8 @@ const { Order } = require('../models');
 const getAllOrders= async(req = request, res = response) => {//obtener todos los cursos
     await Order.findAll({attributes:[
         'id'
-    ], include: [{ model: Order, attributes: ['id', 'quantity', 'price', 'date'],
-        include: [{model: States, 
-            attributes: ['id', 'name']}] }, 
-        ]})
+    ], include: [{model: State, 
+        attributes: ['id', 'name']}]})
         .then(order => {
             const data = JSON.stringify(order);
             const results = JSON.parse(data);

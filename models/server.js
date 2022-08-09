@@ -51,7 +51,7 @@ class Server {
         });
         
         this.app.use( this.paths.products, require('../routes/product') );
-        //this.app.use( this.paths.order, require('../routes/order') );
+        this.app.use( this.paths.order, require('../routes/order') );
 
         this.app.get('*', (req, res) => {
             res.status(404).send(`<h1>404 | Endpoint: " ${req.url} " not found</h1>`);

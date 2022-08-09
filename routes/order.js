@@ -14,7 +14,7 @@ const { getAllOrders,
         getOneOrder,
         createNewOrder,
         updateOneOrder,
-        deleteOneOrder } = require('../controllers/ordersController');
+        deleteOneOrder } = require('../controllers/orderController');
 
 
 const router = Router();

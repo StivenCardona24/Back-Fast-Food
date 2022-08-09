@@ -18,7 +18,7 @@ const Order = sequelize.define('orders', {
         allowNull: false
     },
     date: {
-        type: DataTypes.date,
+        type: DataTypes.DATE,
         allowNull: false
     }
 }, {
