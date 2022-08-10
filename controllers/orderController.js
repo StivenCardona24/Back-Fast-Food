@@ -1,16 +1,16 @@
 const { response, request } = require('express');
-const { Order, State } = require('../models');
+const { Order, State, OrderedProduct, Product } = require('../models');
 
-const { getAllOrderedProduct,
-    getOneOrderedProduct,
+const { 
     createNewOrderedProduct,
-    updateOneOrderedProduct,
-    deleteOneOrderedProduct } = require('../controllers/orderedProductController');
+    deleteOrderedProduct,
+    } = require('../controllers/orderedProductController');
 
 
 
 
-const getAllOrders= async(req = request, res = response) => {//obtener todos los cursos
+const getAllOrders= async(req = request, res = response) => {
+    //obtener todos los cursos
     await Order.findAll({attributes:[
         'id', 'quantity', 'price', 'state_id', 'date'
     ], include: [{model: State, 
@@ -19,29 +19,63 @@ const getAllOrders= async(req = request, res = response) => {//obtener todos los
             const data = JSON.stringify(order);
             const results = JSON.parse(data);
             
+            
             if (results.length > 0) {
-                res.json({
-                    results
-                });
+                for (ord of results) {
+                    
+                    getOrderedProduct(ord);
+   
+                    
+                }
+
+                
+                setTimeout(() => {
+                    res.json({
+                        results
+                        // products
+                    });
+                }, 3000);
             }else{
                 res.status(404).send('No hay pedidos registrados');
             }
         }).catch(error => {
             console.log(error);
         });
+
+      
 };
 
 const getOneOrder = async(req = request, res = response) => {
+
+//    await getOrderedProduct(req.params.id);
+//     console.log(products);
+
     await Order.findOne({attributes:[
         'id', 'quantity', 'price', 'date', 'state_id'
-    ], where: { id: req.params.id } })
+    ], 
+    include: [{model: State, 
+        attributes: ['id', 'name']}],
+    
+    where: { id: req.params.id } })
         .then(order => {
-            const data = JSON.stringify(order);
+            let data = JSON.stringify(order);
+            // data +=  getOrderedProduct(req.params.id);
             const results = JSON.parse(data);
+            
+
+            
+      
+          
             if (results != null) {
-                res.json({
-                    results
-                });
+
+                getOrderedProduct(results);
+                
+                setTimeout(() => {
+                    res.json({
+                        results
+                        // products
+                    });
+                }, 1500);
             }else{
                 res.status(404).send(`Pedido con id: ${req.params.id} no encontrado`);
             }
@@ -49,6 +83,8 @@ const getOneOrder = async(req = request, res = response) => {
         }).catch(error => {
             console.log(error);
         });
+
+    // getOrderedProduct(req.params.id, res);
     
 };
 
@@ -125,7 +161,7 @@ const createNewOrder = async(req = request, res = response) => {
 
 const updateOneOrder = async(req = request, res = response) => {
 
-
+       const prods = req.body.products;
         await Order.update({ 
             quantity: req.body.quantity,
             price: req.body.price,
@@ -137,9 +173,15 @@ const updateOneOrder = async(req = request, res = response) => {
             }
         })
             .then(order => {
-                if (order != 0) {
+                if (order) {
+                    deleteOrderedProduct(req.params.id);
+                    prods.forEach(prod => {
+
+                        createNewOrderedProduct(prod.id_product, req.params.id, prod.quantity, prod.price );
+                    });
                     res.status(200).send(`Pedido con id: ${req.params.id} fue actualizado correctamente`);
-                }else{
+                }
+                else{
                     res.status(404).send(`Pedido con id: ${req.params.id} no encontrado`);
                 }
                 
@@ -153,6 +195,7 @@ const updateOneOrder = async(req = request, res = response) => {
 
 const deleteOneOrder = async(req = request, res = response) => {
 
+    deleteOrderedProduct(req.params.id);
         await Order.destroy({
             where: {
                 id: req.params.id
@@ -169,6 +212,28 @@ const deleteOneOrder = async(req = request, res = response) => {
                 console.log(error);
             })
     
+};
+
+
+async function getOrderedProduct(ord){//obtener todos los cursos
+    await OrderedProduct.findAll({attributes:[
+        'quantity', 'price'
+    ],
+    include: [
+        {model: Product, 
+        attributes: ['id', 'name']},
+    ],
+     where: { id_order: ord.id} })
+        .then(order => {
+            const data = JSON.stringify(order);
+           const results = JSON.parse(data);
+            // console.log(results);
+            if (results.length > 0) {
+                ord.products = results;
+            }
+        }).catch(error => {
+            console.log(error);
+        });
 };
 
 

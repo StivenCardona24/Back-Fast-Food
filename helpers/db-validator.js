@@ -54,6 +54,8 @@ const stateExistingId = async(id = '') => {
 
 
 const getProductsExisting = async(prods = '') => {
+
+    
     prods.forEach(prod => {
         productExistingId(prod.id_product);
         

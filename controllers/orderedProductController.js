@@ -162,6 +162,51 @@ const deleteOneOrderedProduct = async(req = request, res = response) => {
 };
 
 
+const deleteOrderedProduct = async(id = '') => {
+
+    await OrderedProduct.destroy({
+        where: {
+            id_order: id
+        }
+    })
+        .then(order => {
+            if (order != 0) {
+                console.log(`Productos con id: ${id} fue borrado correctamente`);
+            }else{
+              console.log(`Productos con id: ${id} no encontrado`);
+            }
+            
+        }).catch(error => {
+            console.log(error);
+        })
+
+};
+
+
+//  async function getOrderedProduct(id = ''){//obtener todos los cursos
+//     await OrderedProduct.findAll({attributes:[
+//         'id', 'quantity', 'price'
+//     ],
+//     include: [
+//         {model: Product, 
+//         attributes: ['id', 'name']},
+//     ],
+//      where: { id_order: id} })
+//         .then(order => {
+//             const data = JSON.stringify(order);
+//            const results = JSON.parse(data);
+//             // console.log(results);
+//             if (results.length > 0) {
+//                 console.log(results);
+//                 return 'hola';
+//             }else{
+//                 return 'No hay pedidos registrados';
+//             }
+//         }).catch(error => {
+//             console.log(error);
+//         });
+// };
+
 
 module.exports = {
     getAllOrderedProduct,
@@ -169,5 +214,7 @@ module.exports = {
     createNewOrderedProduct,
     updateOneOrderedProduct,
     deleteOneOrderedProduct,
+    deleteOrderedProduct,
+    // getOrderedProduct
     
 };

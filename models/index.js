@@ -17,6 +17,13 @@ TypeFood.hasMany(Product, {foreignKey: 'type_id'});
 Order.belongsTo(State, {foreignKey: 'state_id'});
 State.hasMany(Order, {foreignKey: 'state_id'});
 
+OrderedProduct.belongsTo(Order, {foreignKey: 'id_order'});
+Order.hasMany(OrderedProduct, {foreignKey: 'id_order'});
+
+OrderedProduct.belongsTo(Product, {foreignKey: 'id_product'});
+Product.hasMany(OrderedProduct, {foreignKey: 'id_product'});
+
+
 module.exports = {//es adecuado que este en orden alfabetico
 
     Order,
