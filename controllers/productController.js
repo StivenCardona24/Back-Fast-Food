@@ -20,7 +20,7 @@ const getAllProducts = async(req = request, res = response) => {
 const getOneProduct = async(req = request, res = response) => {
     const product = await Product.findOne({where: { id: req.params.id }, include: [{ model: TypeFood}]});
 
-    if (product.length > 0) {
+    if (product) {
         res.json({
             product
         });
