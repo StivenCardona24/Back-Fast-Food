@@ -21,20 +21,12 @@ const getAllOrders= async(req = request, res = response) => {
             
             
             if (results.length > 0) {
-                for (ord of results) {
-                    
-                    getOrderedProduct(ord);
-   
-                    
-                }
-
-                
-                setTimeout(() => {
+               
                     res.json({
                         results
                         // products
                     });
-                }, 3000);
+             
             }else{
                 res.status(404).send('No hay pedidos registrados');
             }
@@ -59,23 +51,15 @@ const getOneOrder = async(req = request, res = response) => {
     where: { id: req.params.id } })
         .then(order => {
             let data = JSON.stringify(order);
-            // data +=  getOrderedProduct(req.params.id);
+       
             const results = JSON.parse(data);
-            
-
-            
-      
           
             if (results != null) {
-
-                getOrderedProduct(results);
-                
-                setTimeout(() => {
                     res.json({
                         results
                         // products
                     });
-                }, 1500);
+        
             }else{
                 res.status(404).send(`Pedido con id: ${req.params.id} no encontrado`);
             }
@@ -215,26 +199,33 @@ const deleteOneOrder = async(req = request, res = response) => {
 };
 
 
-async function getOrderedProduct(ord){//obtener todos los cursos
+async function getOrderedProduct(req = request, res = response){//obtener todos los cursos
     await OrderedProduct.findAll({attributes:[
-        'quantity', 'price'
+        'id','quantity', 'price'
     ],
     include: [
         {model: Product, 
-        attributes: ['id', 'name']},
+        attributes: ['id', 'name', 'price']},
     ],
-     where: { id_order: ord.id} })
+     where: { id_order: req.params.id} })
         .then(order => {
             const data = JSON.stringify(order);
            const results = JSON.parse(data);
             // console.log(results);
             if (results.length > 0) {
-                ord.products = results;
+                res.send({
+                    results,
+                });
+            }
+            else{
+                res.status(404).send(`Pedido con id: ${req.params.id} no encontrado`);
             }
         }).catch(error => {
             console.log(error);
         });
 };
+
+
 
 
 
@@ -244,5 +235,6 @@ module.exports = {
     createNewOrder,
     updateOneOrder,
     deleteOneOrder,
+    getOrderedProduct
     
 };

@@ -1,6 +1,6 @@
 
 const { 
-    Product, TypeFood, Order, State 
+    Product, TypeFood, Order, State, OrderedProduct
 } = require('../models');
 
 
@@ -62,6 +62,15 @@ const getProductsExisting = async(prods = '') => {
     });
 }
 
+const orderedProdExistingId = async(id = '') => {
+    
+    const orderExisting = await OrderedProduct.findByPk(id);
+    if ( !orderExisting ){
+        throw new Error(`Product with id: ${id} doesn't exists in Order`);
+    }
+
+}
+
 
 
 
@@ -73,5 +82,6 @@ module.exports = {
     typeExistingId,
     orderExistingId,
     stateExistingId,
-    getProductsExisting
+    getProductsExisting,
+    orderedProdExistingId
 }

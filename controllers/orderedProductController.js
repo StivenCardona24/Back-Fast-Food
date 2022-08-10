@@ -95,6 +95,50 @@ const createNewOrderedProduct = async(id_product = '', id_order = '', quantity =
                 console.log(error);
             });
     };
+
+    
+const createOrderedProduct = async(req = request, res = response  ) => {
+    //res.send(`Create course ${req.params.id}`);
+
+
+    // console.log(`There are ${await Project.count()} projects`);
+
+    // const amount = await Project.count({
+    // where: {
+    //     id: {
+    //         [Op.gt]: 25
+    //     }   
+    // }
+    // } );
+    // console.log(`There are ${amount} projects with an id greater than 25`);
+   
+   
+        await OrderedProduct.create(
+            {
+                id_product: req.body.id_product,
+                id_order: req.body.id_order,
+                quantity: req.body.quantity,
+                price: req.body.price,
+          
+
+        }, { fields: ['id_product', 'id_order', 'quantity', 'price',] })
+            .then(order => {
+               
+                if (order) {
+                    
+                    res.send({
+                        order,
+                        msg: 'Pedido creado correctamente'
+                    });      
+                    
+                } else {
+                    res.status(400).send('Error in insert new record');
+                }
+                
+            }).catch(error => {
+                console.log(error);
+            });
+    };
     
     
 
@@ -113,24 +157,25 @@ const createNewOrderedProduct = async(id_product = '', id_order = '', quantity =
 
 // }
 
-const updateOneOrderedProduct = async(id_product = '', id_order = '', quantity = '', price= '' ) => {
+const updateOneOrderedProduct = async(req = request, res = response ) => {
 
 
         await OrderedProduct.update({ 
-            id_product: id_product,
-            id_order: id_order,
-            quantity: quantity,
-            price: price,
+            id_product: req.body.id_product,
+            id_order: req.body.id_order,
+            quantity: req.body.quantity,
+            price: req.body.price,
         }, {
             where: {
                 id: req.params.id
             }
         })
             .then(order => {
-                if (order != 0) {
-                   console.log(`Producto con id: ${req.params.id} fue actualizado correctamente`);
+                if (order) {
+                    
+                    res.status(200).send(`Producto con id: ${req.params.id} en la orden fue actualizado correctamente`);
                 }else{
-                    console.log(`Producto con id: ${req.params.id} no encontrado`);
+                    res.status(404).send(`Producto con id: ${req.params.id} en la orden no encontrado`);
                 }
                 
             }).catch(error => {
@@ -150,9 +195,9 @@ const deleteOneOrderedProduct = async(req = request, res = response) => {
         })
             .then(order => {
                 if (order != 0) {
-                    console.log(`Producto con id: ${req.params.id} fue borrado correctamente`);
+                    res.status(200).send(`Producto con id: ${req.params.id} fue borrado correctamente de la orden`);
                 }else{
-                  console.log(`Producto con id: ${req.params.id} no encontrado`);
+                    res.status(404).send(`Producto con id: ${req.params.id} no encontrado en la orden`);
                 }
                 
             }).catch(error => {
@@ -215,6 +260,7 @@ module.exports = {
     updateOneOrderedProduct,
     deleteOneOrderedProduct,
     deleteOrderedProduct,
+    createOrderedProduct
     // getOrderedProduct
     
 };

@@ -12,7 +12,8 @@ class Server {
         this.port = process.env.PORT;
         this.paths = {
             products: '/api/v1/products',
-            order: '/api/v1/order'
+            order: '/api/v1/order',
+            orderedProduct: '/api/v1/orderedProduct'
         }
 
         //db connection
@@ -52,6 +53,7 @@ class Server {
         
         this.app.use( this.paths.products, require('../routes/product') );
         this.app.use( this.paths.order, require('../routes/order') );
+        this.app.use( this.paths.orderedProduct, require('../routes/orderedProducts') );
 
         this.app.get('*', (req, res) => {
             res.status(404).send(`<h1>404 | Endpoint: " ${req.url} " not found</h1>`);

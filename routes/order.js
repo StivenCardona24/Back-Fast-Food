@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const {
     valFields, 
 } = require('../middlewares');
-const { orderExistingId, stateExistingId, getProductsExisting} = require('../helpers/db-validator');
+const { orderExistingId, stateExistingId, getProductsExisting, productExistingId} = require('../helpers/db-validator');
 
 
 
@@ -14,7 +14,11 @@ const { getAllOrders,
         getOneOrder,
         createNewOrder,
         updateOneOrder,
-        deleteOneOrder } = require('../controllers/orderController');
+        deleteOneOrder,
+        getOrderedProduct,
+     } = require('../controllers/orderController');
+
+
 
 
 const router = Router();
@@ -26,6 +30,11 @@ router.get('/:id', [
     check('id').custom( orderExistingId ),
     valFields
 ], getOneOrder);
+router.get('/products/:id', [
+    check('id', 'No es un ID válido').isNumeric(),
+    check('id').custom( orderExistingId ),
+    valFields
+], getOrderedProduct);
 
 
 
@@ -61,5 +70,7 @@ router.delete('/:id',  [
     check('id').custom( orderExistingId),
     valFields
 ],deleteOneOrder);
+
+
 
 module.exports = router;
