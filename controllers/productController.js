@@ -7,19 +7,26 @@ cloudinary.config( process.env.CLOUDINARY_URL );
 const getAllProducts = async(req = request, res = response) => {
 
     const products = await Product.findAll({include: [{ model: TypeFood}]});
-
-    res.json({
-        products
-    });
+    if (products.length > 0) {
+        res.json({
+            products
+        });
+    }else{
+        res.status(404).send('Products not found');
+    }
     
 };
 
 const getOneProduct = async(req = request, res = response) => {
     const product = await Product.findOne({where: { id: req.params.id }, include: [{ model: TypeFood}]});
 
-    res.json({
-        product
-    });
+    if (product) {
+        res.json({
+            product
+        });
+    }else{
+        res.status(404).send('Product not found');
+    }
     
 };
 
