@@ -1,12 +1,12 @@
 const { response, request } = require('express');
 const { Product, TypeFood } = require('../models');
 
-const cloudinary = require('cloudinary').v2
-cloudinary.config( process.env.CLOUDINARY_URL );
+const cloudinary = require('cloudinary').v2//imports cloudinary v2
+cloudinary.config( process.env.CLOUDINARY_URL ); //Cloudinary configuration using the specified ENV variable
 
-const getAllProducts = async(req = request, res = response) => {
+const getAllProducts = async(req = request, res = response) => { //brings all the products from the db products table
 
-    const products = await Product.findAll({include: [{ model: TypeFood}]});
+    const products = await Product.findAll({attributes: {exclude: 'type_id'}, include: [{ model: TypeFood}]});
     if (products.length > 0) {
         res.json({
             products
@@ -17,8 +17,8 @@ const getAllProducts = async(req = request, res = response) => {
     
 };
 
-const getOneProduct = async(req = request, res = response) => {
-    const product = await Product.findOne({where: { id: req.params.id }, include: [{ model: TypeFood}]});
+const getOneProduct = async(req = request, res = response) => {//brings one product from the db products table by using a specified id
+    const product = await Product.findOne({where: { id: req.params.id }, attributes: {exclude: 'type_id'} ,include: [{ model: TypeFood}]});
 
     if (product) {
         res.json({
@@ -30,7 +30,7 @@ const getOneProduct = async(req = request, res = response) => {
     
 };
 
-const createNewProduct = async(req = request, res = response) => {
+const createNewProduct = async(req = request, res = response) => {//creates a new product using the sequelize create method
     await Product.create({
         name: req.body.name.toUpperCase(),
         type_id: req.body.type_id,
@@ -78,7 +78,7 @@ const createNewProduct = async(req = request, res = response) => {
     
 };
 
-const updateOneProduct = async(req = request, res = response) => {
+const updateOneProduct = async(req = request, res = response) => {//updates a product from the db by using an id
     await Product.update({ 
         name: req.body.name.toUpperCase(),
         type_id: req.body.type_id,

@@ -4,7 +4,7 @@ const {
 } = require('../models');
 
 
-//Validar si un número de documento ya esta registrado en la DB
+//Validar si un producto ya esta registrado en la DB
 const productValidator = async(name = '') => {
     
     const productExists = await Product.findOne({ where: { name: name } });
@@ -14,7 +14,7 @@ const productValidator = async(name = '') => {
 
 }
 
-//Validar si un usuario existe en la DB -- validador personalizado
+//Validar si un producto existe en la DB -- validador personalizado
 const productExistingId = async(id = '') => {
     
     const productExisting = await Product.findByPk(id);
@@ -24,7 +24,7 @@ const productExistingId = async(id = '') => {
 
 }
 
-//Validar si la area de estudio existe en la DB -- validador personalizado
+//Validar si un tipo de producto existe en la DB -- validador personalizado
 const typeExistingId = async(id = '') => {
     
     const typeExisting = await TypeFood.findByPk(id);
@@ -34,6 +34,7 @@ const typeExistingId = async(id = '') => {
 
 }
 
+//validar si una orden existe en la DB
 const orderExistingId = async(id = '') => {
     
     const orderExisting = await Order.findByPk(id);
@@ -43,6 +44,7 @@ const orderExistingId = async(id = '') => {
 
 }
 
+//Validar si un estado de la orden existe en la DB
 const stateExistingId = async(id = '') => {
     
     const stateExisting = await State.findByPk(id);
@@ -52,7 +54,7 @@ const stateExistingId = async(id = '') => {
 
 }
 
-
+//comprueba que cada producto enviado en la orden exista en la DB
 const getProductsExisting = async(prods = '') => {
 
     
@@ -62,6 +64,7 @@ const getProductsExisting = async(prods = '') => {
     });
 }
 
+//valida si existe una orden por producto en DB
 const orderedProdExistingId = async(id = '') => {
     
     const orderExisting = await OrderedProduct.findByPk(id);
