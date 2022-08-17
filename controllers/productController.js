@@ -6,7 +6,7 @@ cloudinary.config( process.env.CLOUDINARY_URL ); //Cloudinary configuration usin
 
 const getAllProducts = async(req = request, res = response) => { //brings all the products from the db products table
 
-    const products = await Product.findAll({attributes: {exclude: 'type_id'}, include: [{ model: TypeFood}]});
+    const products = await Product.findAll({attributes: {exclude: ['type_id']}, include: [{ model: TypeFood}]});
     if (products.length > 0) {
         res.json({
             products
