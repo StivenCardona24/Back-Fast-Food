@@ -20,7 +20,7 @@ const Order = sequelize.define('orders', {
     date: {
         type: DataTypes.DATE,
         allowNull: false
-    }
+    }       
 }, {
     // Other model options go here
 });

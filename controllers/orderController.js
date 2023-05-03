@@ -14,7 +14,9 @@ const getAllOrders= async(req = request, res = response) => {
     await Order.findAll({attributes:[
         'id', 'quantity', 'price', 'state_id', 'date'
     ], include: [{model: State, 
-        attributes: ['id', 'name']}]})
+        attributes: ['id', 'name']},
+        {model: OrderedProduct, attributes: ['id', 'quantity', 'price' ]}
+    ]})
         .then(order => {
             const data = JSON.stringify(order);
             const results = JSON.parse(data);
